@@ -12,17 +12,19 @@
 
 CLAI is a Python-based AI agent that takes a natural language prompt and autonomously completes coding tasks by calling tools in a feedback loop — just like a junior developer who can read code, make changes, run tests, and report back.
 
-**Example:**
+**Example — Build a complete REST API from scratch:**
 ```bash
-uv run main.py "Fix the bug: 3 + 7 * 2 shouldn't be 20"
+uv run main.py "Build a REST API for a todo app with endpoints to create, read, \
+update, and delete tasks. Store data in a JSON file. Write a test file covering \
+all endpoints, run the tests, fix any failures automatically, and show me the results."
 ```
 
 The agent will:
-- 🔍 Explore the project files
-- 📖 Read the relevant source code
-- 🔧 Identify and fix the bug
-- ✅ Run tests to verify the fix
-- 💬 Report back with a final response
+- 🔍 Explore the existing project structure
+- 📖 Read relevant files to understand the codebase
+- 🔧 Write multiple new Python files from scratch
+- ✅ Run the tests — fix any failures automatically and re-run
+- 💬 Report back with a final summary of everything it did
 
 ---
 
@@ -67,22 +69,50 @@ The agent has access to 4 tools, all sandboxed to the working directory:
 
 ## 💡 Example Prompts
 
+### 🟢 Beginner — Ask questions about your code
 ```bash
 # Explore the codebase
-uv run main.py "what files are in the calculator directory?"
+uv run main.py "what files are in my project and what does each one do?"
 
-# Read a file
-uv run main.py "read the contents of calculator/main.py"
+# Understand how something works
+uv run main.py "explain how the authentication system works in this project"
 
-# Run tests
-uv run main.py "run the tests in calculator/tests.py"
+# Read a specific file
+uv run main.py "read the contents of app.py and summarise what it does"
 
-# Fix a bug autonomously
-uv run main.py "Fix the bug: 3 + 7 * 2 shouldn't be 20"
-
-# Verbose mode (see every function call)
-uv run main.py "how does the calculator work?" --verbose
+# Run existing tests
+uv run main.py "run the tests and tell me if anything is failing"
 ```
+
+### 🟡 Intermediate — Fix bugs and make changes
+```bash
+# Autonomously find and fix a bug
+uv run main.py "Users are getting a 500 error when they submit the login form. Find and fix the bug."
+
+# Add a new feature
+uv run main.py "Add input validation to the signup form — email must be valid, password must be at least 8 characters"
+
+# Write tests for existing code
+uv run main.py "Write 10 test cases for the user authentication module covering edge cases"
+```
+
+### 🔴 Advanced — Build entire features from scratch
+```bash
+uv run main.py "Build a complete URL shortener from scratch. \
+1) Explore the existing project structure first. \
+2) Create shortener.py with functions to shorten URLs, store mappings in a JSON file, \
+and resolve short URLs back to the original. \
+3) Create a CLI in main.py that accepts a URL and returns the shortened version. \
+4) Create test_shortener.py with at least 15 test cases covering: shortening, \
+resolving, duplicate URLs, invalid URLs, and missing keys. \
+5) Run the tests — fix any failures automatically and re-run until all pass. \
+6) Show me the final test results and a summary of what was built."
+```
+
+> 💬 Use `--verbose` to see every function call and result in real time:
+> ```bash
+> uv run main.py "explain how the authentication system works" --verbose
+> ```
 
 ---
 

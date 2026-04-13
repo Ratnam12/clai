@@ -1,27 +1,153 @@
-# CLAI - AI Coding Agent
+# 🤖 CLAI — AI Coding Agent
 
-## Overview
-CLAI is a Python-based autonomous AI coding agent powered by the Gemini API. Given a natural language task, the agent explores your codebase, reads and writes files, runs Python code, and iterates until the job is done — all on its own.
+> An autonomous AI coding agent powered by Google Gemini that can explore codebases, read & write files, run Python, and fix bugs — all on its own.
 
-## Key Features
-The agent includes a feedback loop that continuously calls Gemini, executes tools, and passes results back until it has a final answer. It supports four tools: listing directory contents, reading files, writing files, and executing Python scripts. All tools are sandboxed to a working directory so the agent cannot access anything outside the permitted folder.
+![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat-square&logo=python)
+![Gemini](https://img.shields.io/badge/Powered%20by-Gemini%20API-orange?style=flat-square&logo=google)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-## Example Usage
+---
+
+## 📌 Overview
+
+CLAI is a Python-based AI agent that takes a natural language prompt and autonomously completes coding tasks by calling tools in a feedback loop — just like a junior developer who can read code, make changes, run tests, and report back.
+
+**Example:**
 ```bash
 uv run main.py "Fix the bug: 3 + 7 * 2 shouldn't be 20"
-uv run main.py "how does the calculator render results to the console?"
-uv run main.py "run the tests in tests.py"
-uv run main.py "what files are in the pkg directory?" --verbose
 ```
 
-## Installation
-The project requires Python 3.11+ and a Gemini API key. Install dependencies with `uv sync`. Create a `.env` file in the root with `GEMINI_API_KEY=your_key_here`. Run the agent with `uv run main.py "your prompt"`. Use `--verbose` to see each function call and its result.
+The agent will:
+- 🔍 Explore the project files
+- 📖 Read the relevant source code
+- 🔧 Identify and fix the bug
+- ✅ Run tests to verify the fix
+- 💬 Report back with a final response
 
-## Technical Structure
-The codebase is organized into focused modules: `main.py` for the agent loop, `prompts.py` for the system prompt, `call_function.py` for dispatching function calls, `config.py` for configuration, and `functions/` for the four tool implementations. The `calculator/` directory serves as a sample project for the agent to work on.
+---
 
-## Security
-The agent is sandboxed to the `./calculator` working directory. The Gemini API key is stored in `.env` which is excluded from git via `.gitignore`. Python execution has a 30-second timeout to prevent infinite loops and the agent is limited to 20 iterations per task.
+## ⚡ Quick Start
 
-## Architecture
-The agent runs a loop up to 20 iterations. Each iteration calls Gemini with the full conversation history, appends the response to the message list, executes any requested tool calls, and appends the results back to the conversation. The loop breaks when Gemini produces a final text response with no further function calls.
+**1. Clone the repo**
+```bash
+git clone https://github.com/Ratnam12/clai.git
+cd clai
+```
+
+**2. Install dependencies**
+```bash
+uv sync
+```
+
+**3. Add your Gemini API key**
+```bash
+# Create a .env file in the root
+GEMINI_API_KEY=your_api_key_here
+```
+
+**4. Run the agent**
+```bash
+uv run main.py "your prompt here"
+```
+
+---
+
+## 🛠️ Tools
+
+The agent has access to 4 tools, all sandboxed to the working directory:
+
+| Tool | Description |
+|------|-------------|
+| `get_files_info` | Lists files and folders with name, size, and type |
+| `get_file_content` | Reads file contents (up to 10,000 characters) |
+| `write_file` | Writes or overwrites a file with new content |
+| `run_python_file` | Executes a Python file with optional arguments |
+
+---
+
+## 💡 Example Prompts
+
+```bash
+# Explore the codebase
+uv run main.py "what files are in the calculator directory?"
+
+# Read a file
+uv run main.py "read the contents of calculator/main.py"
+
+# Run tests
+uv run main.py "run the tests in calculator/tests.py"
+
+# Fix a bug autonomously
+uv run main.py "Fix the bug: 3 + 7 * 2 shouldn't be 20"
+
+# Verbose mode (see every function call)
+uv run main.py "how does the calculator work?" --verbose
+```
+
+---
+
+## 🏗️ Project Structure
+
+```
+clai/
+├── main.py               # Agent loop — entry point
+├── prompts.py            # System prompt for Gemini
+├── call_function.py      # Dispatches function calls
+├── config.py             # Configuration (MAX_CHARS, etc.)
+├── functions/            # Agent tools
+│   ├── get_files_info.py
+│   ├── get_file_content.py
+│   ├── write_file.py
+│   └── run_python_file.py
+└── calculator/           # Sample project for the agent
+    ├── main.py
+    ├── tests.py
+    └── pkg/
+        ├── calculator.py
+        └── render.py
+```
+
+---
+
+## 🔄 How the Agent Loop Works
+
+```
+You give a prompt
+        ↓
+Gemini decides which tool to call
+        ↓
+Tool runs → result returned to Gemini
+        ↓
+Gemini decides what to do next
+        ↓
+Repeats up to 20 iterations
+        ↓
+Gemini gives a final response
+```
+
+The full conversation history (prompts, tool calls, results) is passed to Gemini on every iteration so it always has full context.
+
+---
+
+## 🔒 Security
+
+- All tools are **sandboxed** to `./calculator` — the agent cannot access anything outside
+- API key stored in `.env`, excluded from git via `.gitignore`
+- Python execution has a **30-second timeout**
+- Agent is limited to **20 iterations** per task to prevent runaway loops
+
+---
+
+## 🧰 Built With
+
+- [Python 3.11+](https://www.python.org/)
+- [Google Gemini API](https://ai.google.dev/)
+- [uv](https://github.com/astral-sh/uv) — fast Python package manager
+- [python-dotenv](https://github.com/theskumar/python-dotenv)
+
+---
+
+## 👤 Author
+
+**Ratnam Singh**
+- GitHub: [@Ratnam12](https://github.com/Ratnam12)

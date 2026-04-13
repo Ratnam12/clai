@@ -6,6 +6,8 @@ import argparse
 from google.genai import types
 from prompts import system_prompt
 from call_function import available_functions, call_function
+from rich.console import Console
+from rich.markdown import Markdown
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -30,7 +32,7 @@ for _ in range(20):
     for attempt in range(3):
         try:
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model="gemini-3-flash-preview",
                 contents=messages,
                 config=types.GenerateContentConfig(
                     tools=[available_functions],
@@ -50,7 +52,7 @@ for _ in range(20):
             messages.append(candidate.content)
 
     if not response.function_calls:
-        print(f"Final response:\n{response.text}")
+        Console().print(Markdown(response.text))
         break
 
     function_responses = []

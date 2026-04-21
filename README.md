@@ -129,7 +129,7 @@ clai/
 │   ├── get_file_content.py
 │   ├── write_file.py
 │   └── run_python_file.py
-└── calculator/           # Sample project for the agent
+└── clai_created_projects/           # Sample project for the agent
     ├── main.py
     ├── tests.py
     └── pkg/
@@ -161,7 +161,7 @@ The full conversation history (prompts, tool calls, results) is passed to Gemini
 
 ## 🔒 Security
 
-- All tools are **sandboxed** to `./calculator` — the agent cannot access anything outside
+- All tools are **sandboxed** to `./clai_created_projects` — the agent cannot access anything outside
 - API key stored in `.env`, excluded from git via `.gitignore`
 - Python execution has a **30-second timeout**
 - Agent is limited to **20 iterations** per task to prevent runaway loops
